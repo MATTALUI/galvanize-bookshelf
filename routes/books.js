@@ -37,8 +37,26 @@ router.post('/books', function(req, res){
   });
 });
 router.patch('/books/:id', function(req, res, next){
-  console.log('patched');
-  res.send();
+  req.body.cover_url = req.body.coverUrl;
+  delete req.body.coverUrl;
+  knex('books')
+  .update(req.body)
+  .where('id', req.params.id)
+  .returning('*')
+  .then(function(info){
+    res.send(humps.camelizeKeys(info[0]));
+  });
+});
+router.delete('/books/:id', function(req, res, next){
+  knex('books')
+  .del()
+  .where('id', req.params.id)
+  .returning('*')
+  .then(function(deleted){
+    delete deleted[0].id;
+    res.send(humps.camelizeKeys(deleted[0]));
+  });
+
 });
 
 module.exports = router;
