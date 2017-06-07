@@ -24,7 +24,7 @@ switch (app.get('env')) {
 }
 
 app.use(bodyParser.json());
-app.use(cookieParser());
+app.use(cookieParser('secret', {httpOnly: true}));
 
 const path = require('path');
 

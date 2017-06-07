@@ -5,6 +5,7 @@ const knex = require('../knex');
 const bcrypt = require('bcrypt');
 const humps = require('humps');
 
+
 router.post('/users', function(req, res){
   bcrypt.hash(req.body.password, 8, function(err, hash){
     let newUser = {
