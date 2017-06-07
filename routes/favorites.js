@@ -5,7 +5,7 @@ const router = express.Router();
 const knex = require('../knex');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const superSecretKeyDontEvenTryAndStealIt = 'superSecretKeyDontEvenTryAndStealIt';//process.env.SECRET_KEY;
+const superSecretKeyDontEvenTryAndStealIt = process.env.SECRET_KEY;
 
 router.use('/favorites', function(req, res, next){
   if(req.cookies.token){
