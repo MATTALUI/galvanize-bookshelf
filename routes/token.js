@@ -5,7 +5,7 @@ const router = express.Router();
 const knex = require('../knex');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const superSecretKeyDontEvenTryAndStealIt = process.env.SECRET_KEY;
+const superSecretKeyDontEvenTryAndStealIt = 'superSecretKeyDontEvenTryAndStealIt';//process.env.SECRET_KEY;
 
 router.get('/token', function(req,res){
   if(Object.keys(req.cookies).length > 0){
