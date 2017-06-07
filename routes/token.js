@@ -5,6 +5,7 @@ const router = express.Router();
 const knex = require('../knex');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const superSecretKeyDontEvenTryAndStealIt = process.env.SECRET_KEY;
 
 router.get('/token', function(req,res){
   if(Object.keys(req.cookies).length > 0){
@@ -35,7 +36,7 @@ router.post('/token', function(req, res){
               lastName: userInfo.lastName,
               id: userInfo.id
             }
-            let token = jwt.sign(response, 'secret');
+            let token = jwt.sign(response, superSecretKeyDontEvenTryAndStealIt);
             res.cookie('token', token, {httpOnly:true});
             res.send(response);
           }else{

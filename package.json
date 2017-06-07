@@ -8,7 +8,7 @@
     "knex": "knex",
     "lint": "eslint  --ignore-pattern public/js/vendor",
     "nf": "nf start",
-    "start": "nodemon server.js",
+    "start": "node server.js",
     "test": "mocha"
   },
   "repository": {
@@ -36,6 +36,7 @@
     "jsonwebtoken": "^7.4.1",
     "knex": "^0.11.7",
     "morgan": "^1.7.0",
+    "node": "0.0.0",
     "pg": "^6.0.0",
     "sqlite3": "^3.1.8"
   },
