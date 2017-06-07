@@ -8,10 +8,8 @@ const bcrypt = require('bcrypt');
 
 router.get('/token', function(req,res){
   if(Object.keys(req.cookies).length > 0){
-    console.log('with cookies: ', req.cookies);
     res.send(true);
   }else{
-    console.log('without cookies: ',req.cookies);
     res.send(false);
   }
 });
@@ -26,23 +24,25 @@ router.post('/token', function(req, res){
     .first()
     .then(function(userInfo){
       if (!userInfo){
-        console.log('bad email');
-        res.set('Content-Type', 'text/plain');
-        res.status(400).send('Bad email or password');
-      }else if(!bcrypt.compareSync(req.body.password, userInfo.hash)){
-        console.log('bad password');
         res.set('Content-Type', 'text/plain');
         res.status(400).send('Bad email or password');
       }else{
-        let response = {
-          email: userInfo.email,
-          firstName: userInfo.firstName,
-          lastName: userInfo.lastName,
-          id: userInfo.id
-        }
-        let token = jwt.sign(response, 'secret');
-        res.cookie('token', token, {httpOnly:true});
-        res.send(response);
+        bcrypt.compare(req.body.password, userInfo.hash, function(err, hashRes){
+          if (hashRes){
+            let response = {
+              email: userInfo.email,
+              firstName: userInfo.firstName,
+              lastName: userInfo.lastName,
+              id: userInfo.id
+            }
+            let token = jwt.sign(response, 'secret');
+            res.cookie('token', token, {httpOnly:true});
+            res.send(response);
+          }else{
+            res.set('Content-Type', 'text/plain');
+            res.status(400).send('Bad email or password');
+          }
+        })
       }
     });
   }
