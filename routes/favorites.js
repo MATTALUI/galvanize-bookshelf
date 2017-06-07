@@ -51,11 +51,33 @@ router.get('/favorites/:check', function(req,res,next){
 
   });
 });
-router.post('favorites', function(req,res,next){
-  console.log('post');
-  res.send({});
+router.post('/favorites', function(req,res,next){
+  jwt.verify(req.cookies.token, superSecretKeyDontEvenTryAndStealIt, function(err, userInfo){
+    let newRow ={
+      book_id: req.body.bookId,
+      user_id:  userInfo.id
+    }
+    knex('favorites')
+    .insert(newRow)
+    .returning(['id','user_id as userId','book_id as bookId'])
+    .then(function(createdRow){
+      res.send(createdRow[0]);
+    });
+
+  });
 });
-router.delete('')
+router.delete('/favorites',function(req,res,next){
+  jwt.verify(req.cookies.token, superSecretKeyDontEvenTryAndStealIt, function(err, userInfo){
+    knex('favorites')
+    .del()
+    .where('book_id', req.body.bookId)
+    .where('user_id', userInfo.id)
+    .returning(['book_id as bookId', 'user_id as userId'])
+    .then(function(deletedRow){
+      res.send(deletedRow[0]);
+    });
+  });
+});
 
 
 
